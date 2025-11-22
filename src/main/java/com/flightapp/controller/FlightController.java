@@ -12,7 +12,7 @@ import com.flightapp.dto.FlightSearchResponse;
 import com.flightapp.dto.TicketResponse;
 import com.flightapp.entity.FlightInventory;
 import com.flightapp.service.BookingService;
-import com.flightapp.service.FlightServiceTest;
+import com.flightapp.service.FlightService;   
 import com.flightapp.service.InventoryService;
 
 import jakarta.validation.Valid;
@@ -22,11 +22,11 @@ import jakarta.validation.Valid;
 public class FlightController {
 
     private final InventoryService inventoryService;
-    private final FlightServiceTest flightService;
+    private final FlightService flightService;      // ✅ correct type
     private final BookingService bookingService;
 
     public FlightController(InventoryService inventoryService,
-                            FlightServiceTest flightService,
+                            FlightService flightService,   // ✅ correct type
                             BookingService bookingService) {
         this.inventoryService = inventoryService;
         this.flightService = flightService;
