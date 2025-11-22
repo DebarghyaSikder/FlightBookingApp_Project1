@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -35,6 +36,8 @@ class FlightServiceTest {
         request.setFromPlace("DEL");
         request.setToPlace("BLR");
         request.setJourneyDate(LocalDate.of(2025, 11, 22));
+        // if your DTO now has passengerCount / tripType, you can set them too,
+        // but FlightService currently doesn't use them
 
         LocalDateTime start = request.getJourneyDate().atStartOfDay();
         LocalDateTime end = request.getJourneyDate().atTime(23, 59, 59);
@@ -47,10 +50,12 @@ class FlightServiceTest {
         inv.setId(1L);
         inv.setAirline(airline);
         inv.setFlightNumber("6E-202");
+        inv.setFromPlace("DEL");
+        inv.setToPlace("BLR");
         inv.setDepartureTime(LocalDateTime.of(2025, 11, 22, 10, 30));
         inv.setArrivalTime(LocalDateTime.of(2025, 11, 22, 13, 10));
-        inv.setPriceOneWay(4500.0);
-        inv.setPriceRoundTrip(8000.0);
+        inv.setPriceOneWay(BigDecimal.valueOf(4500));
+        inv.setPriceRoundTrip(BigDecimal.valueOf(8000));
 
         when(flightRepo.findByFromPlaceIgnoreCaseAndToPlaceIgnoreCaseAndDepartureTimeBetween(
                 "DEL", "BLR", start, end
@@ -65,7 +70,10 @@ class FlightServiceTest {
 
         assertThat(res.getFlightId()).isEqualTo(1L);
         assertThat(res.getAirlineName()).isEqualTo("Indigo");
+        assertThat(res.getAirlineLogoUrl()).isEqualTo("https://logo.com/indigo.png");
         assertThat(res.getFlightNumber()).isEqualTo("6E-202");
+        assertThat(res.getPriceOneWay()).isEqualByComparingTo(BigDecimal.valueOf(4500));
+        assertThat(res.getPriceRoundTrip()).isEqualByComparingTo(BigDecimal.valueOf(8000));
 
         verify(flightRepo, times(1))
                 .findByFromPlaceIgnoreCaseAndToPlaceIgnoreCaseAndDepartureTimeBetween("DEL", "BLR", start, end);
@@ -91,5 +99,8 @@ class FlightServiceTest {
 
         // Assert
         assertThat(result).isEmpty();
+
+        verify(flightRepo, times(1))
+                .findByFromPlaceIgnoreCaseAndToPlaceIgnoreCaseAndDepartureTimeBetween("DEL", "BLR", start, end);
     }
 }
