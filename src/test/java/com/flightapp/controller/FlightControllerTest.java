@@ -29,10 +29,11 @@ class FlightControllerTest {
     @Test
     void searchFlights_returns200EvenIfNoFlights() throws Exception {
         FlightSearchRequest req = new FlightSearchRequest();
-        req.setFromPlace("KOL");
-        req.setToPlace("HYD");
-        req.setJourneyDate(LocalDate.now().plusDays(10));
+        req.setFromPlace("XXX");
+        req.setToPlace("YYY");
+        req.setJourneyDate(LocalDate.now().plusDays(10));  
         req.setTripType(TripType.ONE_WAY);
+        req.setPassengerCount(1);                          
 
         String json = objectMapper.writeValueAsString(req);
 
@@ -40,6 +41,6 @@ class FlightControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
-
     }
+
 }
