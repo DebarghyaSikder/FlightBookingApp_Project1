@@ -29,8 +29,8 @@ class FlightControllerTest {
     @Test
     void searchFlights_returns200EvenIfNoFlights() throws Exception {
         FlightSearchRequest req = new FlightSearchRequest();
-        req.setFromPlace("XXX");
-        req.setToPlace("YYY");
+        req.setFromPlace("KOL");
+        req.setToPlace("HYD");
         req.setJourneyDate(LocalDate.now().plusDays(10));
         req.setTripType(TripType.ONE_WAY);
 
